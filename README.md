@@ -1,0 +1,1 @@
+This is a mod for modders. It allows you to configure your mod settings page using a .xml file or through code, eliminating the need to close the game and modify the .cfg file to change the mod settings.

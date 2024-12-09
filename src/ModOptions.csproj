@@ -1,0 +1,124 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- Edit this!-->
+    <ModName>ModOptions</ModName>
+
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>$(ModName)</AssemblyName>
+    <Description>A mod to manage Elin mod options.</Description>
+    <Version>0.23.45</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <RestoreAdditionalProjectSources>
+      https://api.nuget.org/v3/index.json;
+      https://nuget.bepinex.dev/v3/index.json;
+      https://nuget.samboy.dev/v3/index.json
+    </RestoreAdditionalProjectSources>
+    <RootNamespace>$(ModName)</RootNamespace>
+    <OutputType>Library</OutputType>
+    <!-- Base paths -->
+    <!-- You should modify the Directory.Build.props.template -> Directory.Build.props and put a custom path there if needed. -->
+    <GamePath Condition="'$(GamePath)' == '' AND '$(OS)' == 'Windows_NT'">C:\Program Files (x86)\Steam\steamapps\common\Elin</GamePath>
+    <GamePath Condition="'$(GamePath)' == '' AND '$(OS)' != 'Windows_NT'">/home/$(USERNAME)/.steam/steam/steamapps/common/Elin</GamePath>
+    
+    <!-- derived paths -->
+    <ManagedPath>$(GamePath)/Elin_Data/Managed</ManagedPath>
+    <BepInExPath>$(GamePath)/BepInEx</BepInExPath>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(ManagedPath)/Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Elin">
+      <HintPath>$(ManagedPath)/Elin.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Plugins.UI">
+      <HintPath>$(ManagedPath)/Plugins.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Plugins.BaseCore">
+      <HintPath>$(ManagedPath)/Plugins.BaseCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(ManagedPath)/UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(ManagedPath)/UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(ManagedPath)/UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(ManagedPath)/UnityEngine.UIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(ManagedPath)/UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="BepInEx.Core">
+      <HintPath>$(BepInExPath)/core/BepInEx.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="BepInEx.Unity">
+      <HintPath>$(BepInExPath)/core/BepInEx.Unity.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Harmony">
+      <HintPath>$(BepInExPath)/core/0Harmony.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="package.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <PropertyGroup>
+      <ModFolder>$(GamePath)/Package/Mod_$(ModName)</ModFolder>
+    </PropertyGroup>
+    
+    <!-- Create the mod directory if it doesn't exist -->
+    <MakeDir Directories="$(ModFolder)" />
+    
+    <!-- Copy the compiled DLL to the mod folder -->
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModFolder)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)/package.xml" DestinationFolder="$(ModFolder)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)/preview.jpg" DestinationFolder="$(ModFolder)" SkipUnchangedFiles="true" />
+
+    <!-- Optional: You can add a message to confirm the copy -->
+    <Message Text="Copied $(TargetFileName) and package.xml and preview.jpg to $(ModFolder)" Importance="high" />
+  </Target>
+
+  <!-- Copying the important .dll file to build/, useful if you want to copy it yourself but don't want to dig through bin/...-->
+  <!-- <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <PropertyGroup>
+      <BuildOutputFolder>./build/</BuildOutputFolder>
+    </PropertyGroup>
+    
+    <MakeDir Directories="$(BuildOutputFolder)" />
+    
+    <Copy 
+      SourceFiles="$(TargetPath)"
+      DestinationFolder="$(ModFolder)"
+      SkipUnchangedFiles="true"
+    />
+    
+    <Message Text="Copied $(TargetFileName) to $(BuildOutputFolder)" Importance="high" />
+  </Target> -->
+</Project>

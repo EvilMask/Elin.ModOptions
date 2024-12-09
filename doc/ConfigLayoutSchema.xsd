@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <!-- Type definitions -->
+
+    <xs:simpleType name="IndexList">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\d+(,\d+)*" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="Color">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="#([\da-fA-F]{8}|[\da-fA-F]{6})" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="NonEmpty">
+        <xs:restriction base="xs:string">
+            <xs:pattern value=".+" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="PxOrPercent">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\d+(.\d+)?%?" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="FontSize">
+        <xs:restriction base="xs:positiveInteger">
+            <xs:enumeration value="14" />
+            <xs:enumeration value="16" />
+            <xs:enumeration value="18" />
+            <xs:enumeration value="20" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ContentID">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\w+(\.\w+)*" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="Element">
+        <xs:attribute name="id" type="NonEmpty" use="optional" />
+
+        <xs:attribute name="height" type="xs:positiveInteger" use="optional" />
+        <xs:attribute name="高さ" type="xs:positiveInteger" use="optional" />
+        <xs:attribute name="高度" type="xs:positiveInteger" use="optional" />
+
+        <xs:attribute name="width" type="PxOrPercent" use="optional" />
+        <xs:attribute name="幅" type="PxOrPercent" use="optional" />
+        <xs:attribute name="宽度" type="PxOrPercent" use="optional" />
+    </xs:complexType>
+
+    <xs:complexType name="ContentIDElement">
+        <xs:simpleContent>
+            <xs:extension base="ContentID">
+                <xs:attribute name="id" type="NonEmpty" use="optional" />
+
+                <xs:attribute name="height" type="xs:positiveInteger" use="optional" />
+                <xs:attribute name="高さ" type="xs:positiveInteger" use="optional" />
+                <xs:attribute name="高度" type="xs:positiveInteger" use="optional" />
+
+                <xs:attribute name="width" type="PxOrPercent" use="optional" />
+                <xs:attribute name="幅" type="PxOrPercent" use="optional" />
+                <xs:attribute name="宽度" type="PxOrPercent" use="optional" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="TranslatableComplex">
+        <xs:sequence minOccurs="1" maxOccurs="1">
+            <xs:element ref="contentId" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TranslatableElement">
+        <xs:complexContent>
+            <xs:extension base="TranslatableComplex">
+                <xs:attribute name="id" type="NonEmpty" use="optional" />
+
+                <xs:attribute name="height" type="xs:positiveInteger" use="optional" />
+                <xs:attribute name="高さ" type="xs:positiveInteger" use="optional" />
+                <xs:attribute name="高度" type="xs:positiveInteger" use="optional" />
+
+                <xs:attribute name="width" type="PxOrPercent" use="optional" />
+                <xs:attribute name="幅" type="PxOrPercent" use="optional" />
+                <xs:attribute name="宽度" type="PxOrPercent" use="optional" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="TranslatableWithTooltip">
+        <xs:complexContent>
+            <xs:extension base="TranslatableComplex">
+                <xs:sequence minOccurs="0" maxOccurs="1">
+                    <xs:element ref="tooltip" maxOccurs="1" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="TranslatableElementWithTooltip">
+        <xs:complexContent>
+            <xs:extension base="TranslatableElement">
+                <xs:sequence minOccurs="0" maxOccurs="1">
+                    <xs:element ref="tooltip" maxOccurs="1" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ArgType">
+        <xs:attribute name="contentId" type="ContentID" use="optional" />
+        <xs:attribute name="内容ID" type="ContentID" use="optional" />
+        <xs:attribute name="文本ID" type="ContentID" use="optional" />
+    </xs:complexType>
+
+    <xs:simpleType name="SelectionType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="dropdown" />
+            <xs:enumeration value="lr_select" />
+            <xs:enumeration value="引き出し" />
+            <xs:enumeration value="左右式" />
+            <xs:enumeration value="下拉菜单" />
+            <xs:enumeration value="左右选择" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="Selections">
+        <xs:complexContent>
+            <xs:extension base="Element">
+                <xs:sequence minOccurs="1" maxOccurs="1">
+                    <xs:element ref="title" minOccurs="0" maxOccurs="1" />
+                    <xs:element ref="choice" minOccurs="1" maxOccurs="unbounded" />
+                </xs:sequence>
+                <xs:attribute name="value" type="IndexList" use="optional" />
+                <xs:attribute name="値" type="IndexList" use="optional" />
+                <xs:attribute name="值" type="IndexList" use="optional" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="HLayoutContent">
+        <xs:complexContent>
+            <xs:extension base="Element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element ref="vlayout" maxOccurs="1" />
+                    <xs:element ref="hlayout" maxOccurs="1" />
+                    <xs:element ref="slider" maxOccurs="1" />
+                    <xs:element ref="text" maxOccurs="1" />
+                    <xs:element ref="button" maxOccurs="1" />
+                    <xs:element ref="topic" maxOccurs="1" />
+                    <xs:element ref="toggle" maxOccurs="1" />
+                    <xs:element ref="one_choice" maxOccurs="1" />
+                    <xs:element ref="t_group" maxOccurs="1" />
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="GroupContent">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element ref="title" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="VLayoutContent">
+        <xs:complexContent>
+            <xs:extension base="GroupContent">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element ref="vlayout" maxOccurs="1" />
+                    <xs:element ref="hlayout" maxOccurs="1" />
+                    <xs:element ref="slider" maxOccurs="1" />
+                    <xs:element ref="text" maxOccurs="1" />
+                    <xs:element ref="button" maxOccurs="1" />
+                    <xs:element ref="topic" maxOccurs="1" />
+                    <xs:element ref="toggle" maxOccurs="1" />
+                    <xs:element ref="one_choice" maxOccurs="1" />
+                    <xs:element ref="t_group" maxOccurs="1" />
+                </xs:choice>
+                <xs:attribute name="id" type="NonEmpty" use="optional" />
+
+                <xs:attribute name="height" type="xs:positiveInteger" use="optional" />
+                <xs:attribute name="高さ" type="xs:positiveInteger" use="optional" />
+                <xs:attribute name="高度" type="xs:positiveInteger" use="optional" />
+
+                <xs:attribute name="width" type="PxOrPercent" use="optional" />
+                <xs:attribute name="幅" type="PxOrPercent" use="optional" />
+                <xs:attribute name="宽度" type="PxOrPercent" use="optional" />
+
+                <xs:attribute name="border" type="xs:boolean" default="true" use="optional" />
+                <xs:attribute name="枠" type="xs:boolean" default="true" use="optional" />
+                <xs:attribute name="边框" type="xs:boolean" default="true" use="optional" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:simpleType name="TextAnchor">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="left" />
+            <xs:enumeration value="middle" />
+            <xs:enumeration value="right" />
+            <xs:enumeration value="左揃え" />
+            <xs:enumeration value="中央揃え" />
+            <xs:enumeration value="右揃え" />
+            <xs:enumeration value="左对齐" />
+            <xs:enumeration value="右对齐" />
+            <xs:enumeration value="居中" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!-- Element definitions -->
+
+    <xs:element name="contentId" type="ContentID" />
+    <xs:element name="内容ID" substitutionGroup="contentId" />
+    <xs:element name="文本ID" substitutionGroup="contentId" />
+
+    <xs:element name="tooltip" type="ContentID" />
+    <xs:element name="ツールチップ" substitutionGroup="tooltip" />
+    <xs:element name="提示文本" substitutionGroup="tooltip" />
+
+    <xs:element name="topic" type="ContentIDElement" />
+    <xs:element name="トピック" substitutionGroup="contentId" />
+    <xs:element name="主题" substitutionGroup="contentId" />
+
+    <xs:element name="button" type="TranslatableElementWithTooltip" />
+    <xs:element name="ボタン" substitutionGroup="button" />
+    <xs:element name="按钮" substitutionGroup="button" />
+
+    <xs:element name="text">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="ContentIDElement">
+                    <!-- Font size of a simple text -->
+                    <xs:attribute name="size" type="FontSize" default="16" use="optional" />
+                    <xs:attribute name="サイズ" type="FontSize" default="16" use="optional" />
+                    <xs:attribute name="字号" type="FontSize" default="16" use="optional" />
+
+                    <xs:attribute name="color" type="Color" use="optional" />
+                    <xs:attribute name="色" type="Color" use="optional" />
+                    <xs:attribute name="颜色" type="Color" use="optional" />
+
+                    <xs:attribute name="align" type="TextAnchor" use="optional" />
+                    <xs:attribute name="整列" type="TextAnchor" use="optional" />
+                    <xs:attribute name="对齐" type="TextAnchor" use="optional" />
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="文字" substitutionGroup="text" />
+    <xs:element name="文本" substitutionGroup="text" />
+
+    <xs:element name="slider">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="ContentIDElement">
+                    <xs:attribute name="buttons" type="xs:boolean" default="false" use="optional" />
+                    <xs:attribute name="ボタン式" type="xs:boolean" default="false" use="optional" />
+                    <xs:attribute name="按钮" type="xs:boolean" default="false" use="optional" />
+
+                    <xs:attribute name="min" type="xs:float" default="0" use="optional" />
+                    <xs:attribute name="最小値" type="xs:float" default="0" use="optional" />
+                    <xs:attribute name="最小值" type="xs:float" default="0" use="optional" />
+
+                    <xs:attribute name="max" type="xs:float" default="1" use="optional" />
+                    <xs:attribute name="最大値" type="xs:float" default="1" use="optional" />
+                    <xs:attribute name="最大值" type="xs:float" default="1" use="optional" />
+
+                    <xs:attribute name="value" type="xs:float" use="optional" />
+                    <xs:attribute name="値" type="xs:float" use="optional" />
+                    <xs:attribute name="值" type="xs:float" use="optional" />
+
+                    <xs:attribute name="step" type="xs:float" use="optional" />
+                    <xs:attribute name="ステップ" type="xs:float" use="optional" />
+                    <xs:attribute name="步长" type="xs:float" use="optional" />
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="スライダー" substitutionGroup="slider" />
+    <xs:element name="滑动条" substitutionGroup="slider" />
+
+    <xs:element name="toggle">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="TranslatableElementWithTooltip">
+                    <xs:attribute name="checked" type="xs:boolean" default="false" use="optional" />
+                    <xs:attribute name="チェック" type="xs:boolean" default="false" use="optional" />
+                    <xs:attribute name="勾选" type="xs:boolean" default="false" use="optional" />
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="スイッチ" substitutionGroup="toggle" />
+    <xs:element name="开关" substitutionGroup="toggle" />
+
+    <xs:element name="choice" type="TranslatableWithTooltip" />
+    <xs:element name="選択肢" substitutionGroup="choice" />
+    <xs:element name="选项" substitutionGroup="choice" />
+
+    <xs:element name="title" type="ContentID" />
+    <xs:element name="タイトル" substitutionGroup="title" />
+    <xs:element name="标题" substitutionGroup="title" />
+
+    <xs:element name="one_choice">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="Selections">
+                    <xs:attribute name="type" type="SelectionType" default="dropdown" use="optional" />
+                    <xs:attribute name="タイプ" type="SelectionType" default="dropdown" use="optional" />
+                    <xs:attribute name="样式" type="SelectionType" default="dropdown" use="optional" />
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="単一選択" substitutionGroup="one_choice" />
+    <xs:element name="单选" substitutionGroup="one_choice" />
+
+    <xs:element name="t_group">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="Selections">
+                    <xs:attribute name="min_count" type="xs:nonNegativeInteger" default="1" use="optional" />
+                    <xs:attribute name="選択下限" type="xs:nonNegativeInteger" default="1" use="optional" />
+                    <xs:attribute name="选择下限" type="xs:nonNegativeInteger" default="1" use="optional" />
+
+                    <xs:attribute name="max_count" type="xs:nonNegativeInteger" default="1" use="optional" />
+                    <xs:attribute name="選択上限" type="xs:nonNegativeInteger" default="1" use="optional" />
+                    <xs:attribute name="选择上限" type="xs:nonNegativeInteger" default="1" use="optional" />
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="選択肢グループ" substitutionGroup="t_group" />
+    <xs:element name="选项组" substitutionGroup="t_group" />
+
+    <xs:element name="vlayout" type="VLayoutContent" />
+    <xs:element name="縦組み" substitutionGroup="vlayout" />
+    <xs:element name="竖排" substitutionGroup="vlayout" />
+
+    <xs:element name="hlayout" type="HLayoutContent" />
+    <xs:element name="横組み" substitutionGroup="hlayout" />
+    <xs:element name="横排" substitutionGroup="hlayout" />
+
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="vlayout" maxOccurs="1" />
+                <xs:element ref="hlayout" maxOccurs="1" />
+                <xs:element ref="slider" maxOccurs="1" />
+                <xs:element ref="text" maxOccurs="1" />
+                <xs:element ref="toggle" maxOccurs="1" />
+                <xs:element ref="button" maxOccurs="1" />
+                <xs:element ref="topic" maxOccurs="1" />
+                <xs:element ref="one_choice" maxOccurs="1" />
+                <xs:element ref="t_group" maxOccurs="1" />
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="設定" substitutionGroup="config" />
+    <xs:element name="设置" substitutionGroup="config" />
+
+</xs:schema>

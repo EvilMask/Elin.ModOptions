@@ -1,0 +1,10 @@
+bin/
+obj/
+.vs/
+Properties/
+
+.DS_Store
+Thumbs.db
+
+Directory.Build.props
+*.sln

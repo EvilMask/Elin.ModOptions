@@ -8,9 +8,11 @@ Here is a quick guide to show you how to use this mod.
 ### Dependency
 
 * Add the `.dll` file of this mod to your dependencies list.
+
 ![Mod Preview Image](/doc/assets/dependencies.png)
 * You should always reference from the mod folder `Elin/Package/Mod_ModOptions` so that you get the updated libraries as the mod updates.
 * Remember to put `Mod Options` above your mod in the mod list when you are testing your mod.
+
 ![Mod Preview Image](/doc/assets/load_order.png)
 
 ### Register

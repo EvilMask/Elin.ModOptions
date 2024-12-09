@@ -1,70 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<設定 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ConfigLayoutSchema.xsd">
-    <横組み>
-        <縦組み 枠="true">
-            <スライダー>MySlider</スライダー>
-            <選択肢グループ 選択下限="1" 選択上限="1" 値="1">
-                <タイトル>MySelectionGroup</タイトル>
-                <選択肢>
-                    <内容ID>item01</内容ID>
-                </選択肢>
-                <選択肢>
-                    <内容ID>item02</内容ID>
-                </選択肢>
-                <選択肢>
-                    <内容ID>item03</内容ID>
-                </選択肢>
-                <選択肢>
-                    <内容ID>item04</内容ID>
-                </選択肢>
-            </選択肢グループ>
-            <ボタン id = "btn01">
-                <内容ID>button.name</内容ID>
-                <ツールチップ>button.tooltip</ツールチップ>
-            </ボタン>
-        </縦組み>
-        <縦組み 枠="true">
-            <単一選択 タイプ="左右式" 値="1">
-                <選択肢>
-                    <内容ID>buttonLR.item01</内容ID>
-                    <ツールチップ>tootipId01</ツールチップ>
-                </選択肢>
-                <選択肢>
-                    <内容ID>buttonLR.item02</内容ID>
-                </選択肢>
-                <選択肢>
-                    <内容ID>buttonLR.item03</内容ID>
-                </選択肢>
-            </単一選択>
-            <単一選択 タイプ="引き出し" 値="1">
-                <選択肢>
-                    <内容ID>dropdown.item01</内容ID>
-                    <ツールチップ>dropdown.tootip01</ツールチップ>
-                </選択肢>
-                <選択肢>
-                    <内容ID>dropdown.item02</内容ID>
-                </選択肢>
-                <選択肢>
-                    <内容ID>dropdown.item03</内容ID>
-                </選択肢>
-            </単一選択>
-            <選択肢グループ id = "group02" 選択下限="0" 選択上限="2" 値="1,2">
-                <タイトル>MySelectionGroup2</タイトル>
-                <選択肢>
-                    <内容ID>item01</内容ID>
-                </選択肢>
-                <選択肢>
-                    <内容ID>item02</内容ID>
-                </選択肢>
-                <選択肢>
-                    <内容ID>item03</内容ID>
-                </選択肢>
-                <選択肢>
-                    <内容ID>item04</内容ID>
-                </選択肢>
-            </選択肢グループ>
-        </縦組み>
-    </横組み>
+<设置 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ConfigLayoutSchema.xsd">
+    <横排>
+        <竖排 边框="true">
+            <滑动条>MySlider</滑动条>
+            <选项组 选择下限="1" 选择上限="1" 值="1">
+                <标题>MySelectionGroup</标题>
+                <选项>
+                    <文本ID>item01</文本ID>
+                </选项>
+                <选项>
+                    <文本ID>item02</文本ID>
+                </选项>
+                <选项>
+                    <文本ID>item03</文本ID>
+                </选项>
+                <选项>
+                    <文本ID>item04</文本ID>
+                </选项>
+            </选项组>
+            <按钮 id = "btn01">
+                <文本ID>button.name</文本ID>
+                <提示文本>button.tooltip</提示文本>
+            </按钮>
+        </竖排>
+        <竖排 边框="true">
+            <单选 样式="左右选择" 值="1">
+                <选项>
+                    <文本ID>buttonLR.item01</文本ID>
+                    <提示文本>tootipId01</提示文本>
+                </选项>
+                <选项>
+                    <文本ID>buttonLR.item02</文本ID>
+                </选项>
+                <选项>
+                    <文本ID>buttonLR.item03</文本ID>
+                </选项>
+            </单选>
+            <单选 样式="下拉菜单" 值="1">
+                <选项>
+                    <文本ID>dropdown.item01</文本ID>
+                    <提示文本>dropdown.tootip01</提示文本>
+                </选项>
+                <选项>
+                    <文本ID>dropdown.item02</文本ID>
+                </选项>
+                <选项>
+                    <文本ID>dropdown.item03</文本ID>
+                </选项>
+            </单选>
+            <选项组 id = "group02" 选择下限="0" 选择上限="2" 值="1,2">
+                <标题>MySelectionGroup2</标题>
+                <选项>
+                    <文本ID>item01</文本ID>
+                </选项>
+                <选项>
+                    <文本ID>item02</文本ID>
+                </选项>
+                <选项>
+                    <文本ID>item03</文本ID>
+                </选项>
+                <选项>
+                    <文本ID>item04</文本ID>
+                </选项>
+            </选项组>
+        </竖排>
+    </横排>
     <文字>exampleText</文字>
-    <スライダー id = "slider02" 最小值="0" 最大値="100" 値="30" ボタン式="true">MySlider</スライダー>
-</設定>
+    <滑动条 id = "slider02" 最小值="0" 最大値="100" 値="30" 按钮="true">MySlider</滑动条>
+</设置>

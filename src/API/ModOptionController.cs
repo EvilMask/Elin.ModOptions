@@ -10,7 +10,7 @@ namespace EvilMask.Elin.ModOptions;
 
 public sealed class ModOptionController
 {
-    public static ModOptionController Register(string guid, string tooptipId = null)
+    public static ModOptionController Register(string guid, string tooptipId = null, params object[] configs)
     {
         if (!Plugin.Instance.Ready) return null;
         if (Plugin.Instance.ManagedMods.ContainsKey(guid))
@@ -18,11 +18,11 @@ public sealed class ModOptionController
             Plugin.Warn($"Mod ID [{guid}] has already been registed! Ignoring ...");
             return null;
         }
-        var result = new ModOptionController(guid);
-        result.SetModTooltipId(tooptipId);
-        Plugin.Instance.ManagedMods.Add(guid, result);
-        Plugin.Message($"Mod ID [{guid}] - registration successful .");
-        return result;
+        var controller = CreateController(guid, tooptipId);
+        if (configs == null) return controller;
+        foreach (var obj in configs)
+            ModCfg.EnumMarkedFields(obj, controller.PreBuildInfosFromReflection);
+        return controller;
     }
 
     public string Name => Tr(Guid);
@@ -67,9 +67,19 @@ public sealed class ModOptionController
     internal string Guid;
     internal Dictionary<string, Dictionary<string, string>> Dict { get; } = [];
     internal Dictionary<string, OptUIElement> PreBuildElements { get; } = [];
+    internal List<AutoPreBuildUIInfo> PreBuildInfosFromReflection { get; } = [];
+    internal List<Action> CleanersForCfg { get; } = [];
     internal VLayoutInfo PreBuildRoot { set; get; } = null;
     internal OptionUIBuilder Builder { get; set; } = null;
 
+    internal static ModOptionController CreateController(string guid, string tooptipId)
+    {
+        var result = new ModOptionController(guid);
+        if (tooptipId != null && !tooptipId.IsEmpty()) result.SetModTooltipId(tooptipId);
+        Plugin.Instance.ManagedMods.Add(guid, result);
+        Plugin.Message($"Mod ID [{guid}] - registration successful .");
+        return result;
+    }
     internal void CreateBuilder(ContentConfigModOptions options, OptVLayout root)
     {
         Builder = new OptionUIBuilder(options) { Controller = this, Root = root };
@@ -78,9 +88,9 @@ public sealed class ModOptionController
 
     internal void BuildUI()
     {
-        Plugin.Log($"[{Name}] Start building UI.");
+        Plugin.Log($"[{Name}] Start building custom UI.");
         OnBuildUI?.Invoke(Builder);
-        Plugin.Log($"[{Name}] Finished building UI.");
+        Plugin.Log($"[{Name}] Finished building custom UI.");
     }
     
     private string m_tooltip_id = null;

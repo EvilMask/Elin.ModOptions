@@ -2,8 +2,7 @@
 using System;
 using HarmonyLib;
 using System.Collections.Generic;
-using System.IO;
-using EvilMask.Elin.ModOptions.UI;
+
 
 namespace EvilMask.Elin.ModOptions;
 
@@ -12,12 +11,11 @@ internal static class ModInfo
     public const int Major = 0;
     public const int Minor = 23;
     public const int Patch = 46;
-    public const int Build = 0;
+    public const int Build = 1;
 
     public const string Guid = "evilmask.elinplugins.modoptions";
     public const string Name = "Mod Options";
-    public const string Version = "0.23.46";
-    // internal const string Version = "0.23.45.0";
+    public const string Version = "0.23.46.1";
 
     public const string NameAndVersion = $"{Name} ver.{Version}";
 }

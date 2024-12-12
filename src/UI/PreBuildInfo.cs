@@ -39,7 +39,7 @@ internal sealed class ButtonInfo : PreBuildInfo
 internal class SelectionsBase : PreBuildInfo
 {
     public string TitleId { get; set; } = null;
-    public List<(string, string)> Selections { get; } = [];
+    public List<(string, string)> Selections { set;  get; } = [];
 }
 
 internal sealed class SelectionsInfo : SelectionsBase

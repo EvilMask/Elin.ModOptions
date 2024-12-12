@@ -4,8 +4,8 @@
   <id>evilmask.elinplugins.modoptions</id>
   <author>EvilMask</author>
   <builtin>false</builtin>
-  <loadPriority>100</loadPriority>
-  <version>0.23.46-alpha</version>
+  <loadPriority>0</loadPriority>
+  <version>0.23.46.1-alpha</version>
   <tags>Library</tags>
   <description>
   </description>

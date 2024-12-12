@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
 
 namespace EvilMask.Elin.ModOptions.Ext
 {
@@ -15,14 +13,6 @@ namespace EvilMask.Elin.ModOptions.Ext
         public static string tr(this string id)
         {
             return Plugin.Dict.Tr(id);
-        }
-        public static EventTrigger.Entry AddPointerListener(this EventTrigger trigger, EventTriggerType type, Action<PointerEventData> action)
-        {
-            EventTrigger.Entry entry = new EventTrigger.Entry();
-            entry.eventID = type;
-            entry.callback.AddListener(eventData => action?.Invoke(eventData as PointerEventData));
-            trigger.triggers.Add(entry);
-            return entry;
         }
     }
 }

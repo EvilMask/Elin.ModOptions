@@ -12,7 +12,7 @@ public sealed class OptionUIBuilder
     {
         if (!Valid) return null;
         if (!Controller.PreBuildElements.TryGetValue(id, out var elmt)) return null;
-        if (elmt is not T) return null;
+        // if (elmt is not T) return null;
         return elmt as T;
     }
 

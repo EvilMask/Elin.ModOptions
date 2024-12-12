@@ -64,6 +64,18 @@
       <HintPath>$(ManagedPath)/UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="NPOI">
+      <HintPath>$(ManagedPath)/NPOI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>$(ManagedPath)/NPOI.OOXML.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>$(ManagedPath)/NPOI.OpenXml4Net.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="BepInEx.Core">
       <HintPath>$(BepInExPath)/core/BepInEx.Core.dll</HintPath>
       <Private>False</Private>

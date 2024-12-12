@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,6 +25,7 @@ namespace EvilMask.Elin.ModOptions.UI
 
         public RectTransform ContentRect => m_options_view;
         public ModOptionController Controlller => m_current.IsEmpty() ? null : Plugin.Instance.ManagedMods[m_current];
+        public UIUninstaller Uninstaller { get; private set; } = null;
 
         public static void Init(Window window)
         {
@@ -82,6 +82,7 @@ namespace EvilMask.Elin.ModOptions.UI
             rect.offsetMin = new Vector2(0, -562);
             rect.offsetMax = new Vector2(820, 0);
             rect.localScale = Vector3.one;
+            Uninstaller = gameObject.AddComponent<UIUninstaller>();
 
             AddLayout(gameObject, false, false);
             (var l_rect, m_mod_list, var l_layout) = AddScrollView(gameObject, "Mod List");
@@ -139,11 +140,18 @@ namespace EvilMask.Elin.ModOptions.UI
 
         public void SetupOptionsView()
         {
+            if ((Controlller?.CleanersForCfg.Count ?? 0) > 0)
+            {
+                foreach (var cleaner in Controlller.CleanersForCfg) cleaner();
+                Controlller.CleanersForCfg.Clear();
+            }
             m_options_view.DestroyChildren(true);
             Controlller?.CreateBuilder(this, RootLayout(m_options_view));
             Controlller?.PreBuildElements.Clear();
             if (Controlller?.PreBuildRoot != null)
                 PreBuildLayoutChilds(Controlller.Builder.Root, Controlller.PreBuildRoot.Childs);
+            if (Controlller?.PreBuildInfosFromReflection.Count > 0)
+                PreBuildUIFromReflections(Controlller.Builder.Root);
             Controlller?.BuildUI();
             if (m_current == string.Empty || m_options_view.transform.childCount == 0)
             {
@@ -154,7 +162,7 @@ namespace EvilMask.Elin.ModOptions.UI
                 Build();
                 return;
             }
-            m_options_view.pivot = new Vector2(0.5f, 1);
+            else m_options_view.pivot = new Vector2(0.5f, 1);
             // Don't know why but the scrollview will go wrong without this:
             m_options_view.SetOffsetToAnchored(0, 0, 0, 0);
         }
@@ -169,78 +177,139 @@ namespace EvilMask.Elin.ModOptions.UI
             return elmt;
         }
 
+        private void PreBuildUIFromReflections(OptLayout parent)
+        {
+            Func<string, string> tr = Controlller.Tr;
+            foreach(var item in Controlller.PreBuildInfosFromReflection)
+            {
+                if (item.Parent != null && !Controlller.PreBuildElements.TryGetValue(item.Parent, out var elmt))
+                {
+                    if (elmt is not OptLayout layout)
+                        Plugin.Warn($"{item.Parent} is not an OptLayout. Add to root ...");
+                    else parent = layout;
+                }
+                var parentIsVLayout = parent is OptVLayout;
+                switch (item.Info)
+                {
+                    case SliderInfo slider:
+                        {
+                            var e = parent.AddSlider($"{tr(slider.TitleId)} ({item.GetValue()})", slider.Buttons, slider.Min, slider.Max, slider.Value);
+                            e.Step = slider.Step;
+                            e.OnValueChanged += _ => e.Title = $"{tr(slider.TitleId)} ({item.GetValue()})";
+                            CheckIdAndStorePreBuild(e, slider, parentIsVLayout);
+                            Controlller.CleanersForCfg.Add(item.Connector(e));
+                        }
+                        break;
+                    case SelectionsInfo dropdown:
+                        {
+                            var p = parent.AddHLayout();
+                            p.Base.childScaleWidth = true;
+                            var t = p.AddText(tr(dropdown.TitleId), TextAnchor.MiddleLeft, 14);
+                            t.Element.Rect().pivot = new Vector2(0, .5f);
+                            t.PrefferedWidth = .5f;
+                            var e = p.AddDropdown(dropdown.Selections.Select(v=>tr(v.Item1)).ToList(), dropdown.Current);
+                            e.PrefferedWidth = .5f;
+                            CheckIdAndStorePreBuild(e, dropdown, false);
+                            Controlller.CleanersForCfg.Add(item.Connector(e));
+                        }
+                        break;
+                    case ToggleInfo toggle:
+                        {
+                            var e = parent.AddToggle(tr(toggle.ContentId), toggle.Checked, tooltip: tr(toggle.TooltipId));
+                            if (toggle.Id != null && !Controlller.PreBuildElements.ContainsKey(toggle.Id))
+                                Controlller.PreBuildElements.Add(toggle.Id, e);
+                            Controlller.CleanersForCfg.Add(item.Connector(e));
+                        }
+                        break;
+                }
+            }
+        }
+
         private void PreBuildLayoutChilds(OptLayout parent, List<PreBuildInfo> childs)
         {
             Func<string, string> tr = Controlller.Tr;
             var parentIsVLayout = parent is OptVLayout;
             foreach (var child in childs)
             {
-                if (child is VLayoutInfo v)
+                switch(child)
                 {
-                    var elmt = v.HasBorder ? parent.AddVLayoutWithBorder(tr(v.TitleId), v.Height) : parent.AddVLayout(v.Height);
-                    // Plugin.Log("v");
-                    CheckIdAndStorePreBuild(elmt, v, parentIsVLayout);
-                    PreBuildLayoutChilds(elmt, v.Childs);
-                }
-                else if (child is HLayoutInfo h)
-                {
-                    var elmt = parent.AddHLayout(h.Width);
-                    // Plugin.Log("h");
-                    CheckIdAndStorePreBuild(elmt, h, parentIsVLayout);
-                    PreBuildLayoutChilds(elmt, h.Childs);
-                }
-                else if (child is TopicInfo topic)
-                {
-                    // Plugin.Log("topic");
-                    var elmt = parent.AddTopic(tr(topic.ContentId));
-                    CheckIdAndStorePreBuild(elmt, topic, parentIsVLayout);
-                }
-                else if (child is ButtonInfo button)
-                {
-                    // Plugin.Log("button");
-                    var elmt = parent.AddButton(tr(button.ContentId), tr(button.TooltipId));
-                    CheckIdAndStorePreBuild(elmt, button, parentIsVLayout);
-                }
-                else if (child is ToggleGroupInfo t_group)
-                {
-                    // Plugin.Log("t_group");
-                    (string, string, bool) ToTri((string, string) ids, int index)
-                        => (tr(ids.Item1), tr(ids.Item2), t_group.Current.Contains(index));
-                    var selections = t_group.Selections.Select(ToTri).ToArray();
-                    var elmt = parent.AddToggleGroup(tr(t_group.TitleId), t_group.MinSelect, t_group.MaxSelect, items: selections);
-                    CheckIdAndStorePreBuild(elmt, t_group, parentIsVLayout);
-                }
-                else if (child is ToggleInfo toggle)
-                {
-                    // Plugin.Log("toggle");
-                    var elmt = parent.AddToggle(tr(toggle.ContentId), toggle.Checked, tooltip: tr(toggle.TooltipId));
-                    CheckIdAndStorePreBuild(elmt, toggle, parentIsVLayout);
-                }
-                else if (child is SelectionsInfo selects)
-                {
-                    // Plugin.Log("selects");
-                    OptUIElement elmt = selects.IsDropdown
-                        ? parent.AddDropdown(selects.Selections.Select(v => (tr(v.Item1), tr(v.Item2))).ToList(), selects.Current)
-                        : parent.AddLRSelect(selects.Selections.Select(v => (tr(v.Item1), tr(v.Item2))).ToList(), selects.Current);
-                    CheckIdAndStorePreBuild(elmt, selects, parentIsVLayout);
-                }
-                else if (child is InputInfo input)
-                {
-                    // Plugin.Log("input");
-                    OptInput elmt = parent.AddInput(input.Value, input.Placeholder, input.Limit, input.Validation);
-                    CheckIdAndStorePreBuild(elmt, input, parentIsVLayout);
-                }
-                else if (child is SliderInfo slider)
-                {
-                    // Plugin.Log("slider");
-                    OptSlider elmt = parent.AddSlider(tr(slider.TitleId), slider.Buttons, slider.Min, slider.Max, slider.Value);
-                    CheckIdAndStorePreBuild(elmt, slider, parentIsVLayout);
-                }
-                else if (child is TextInfo text)
-                {
-                    // Plugin.Log("text");
-                    OptLabel elmt = parent.AddText(tr(text.ContentId), text.Anchor, text.Size ?? 16, text.Color);
-                    CheckIdAndStorePreBuild(elmt, text, parentIsVLayout);
+                    case VLayoutInfo v:
+                        {
+                            var elmt = v.HasBorder ? parent.AddVLayoutWithBorder(tr(v.TitleId), v.Height) : parent.AddVLayout(v.Height);
+                            // Plugin.Log("v");
+                            CheckIdAndStorePreBuild(elmt, v, parentIsVLayout);
+                            PreBuildLayoutChilds(elmt, v.Childs);
+                            break;
+                        }
+                    case HLayoutInfo h:
+                        {
+                            var elmt = parent.AddHLayout(h.Width);
+                            // Plugin.Log("h");
+                            CheckIdAndStorePreBuild(elmt, h, parentIsVLayout);
+                            PreBuildLayoutChilds(elmt, h.Childs);
+                            break;
+                        }
+                    case TopicInfo topic:
+                        {
+                            // Plugin.Log("topic");
+                            var elmt = parent.AddTopic(tr(topic.ContentId));
+                            CheckIdAndStorePreBuild(elmt, topic, parentIsVLayout);
+                            break;
+                        }
+                    case ButtonInfo button:
+                        {
+                            // Plugin.Log("button");
+                            var elmt = parent.AddButton(tr(button.ContentId), tr(button.TooltipId));
+                            CheckIdAndStorePreBuild(elmt, button, parentIsVLayout);
+                            break;
+                        }
+                    case ToggleGroupInfo t_group:
+                        {
+                            // Plugin.Log("t_group");
+                            (string, string, bool) ToTri((string, string) ids, int index)
+                                => (tr(ids.Item1), tr(ids.Item2), t_group.Current.Contains(index));
+                            var selections = t_group.Selections.Select(ToTri).ToArray();
+                            var elmt = parent.AddToggleGroup(tr(t_group.TitleId), t_group.MinSelect, t_group.MaxSelect, items: selections);
+                            CheckIdAndStorePreBuild(elmt, t_group, parentIsVLayout);
+                            break;
+                        }
+                    case ToggleInfo toggle:
+                        {
+                            // Plugin.Log("toggle");
+                            var elmt = parent.AddToggle(tr(toggle.ContentId), toggle.Checked, tooltip: tr(toggle.TooltipId));
+                            CheckIdAndStorePreBuild(elmt, toggle, parentIsVLayout);
+                            break;
+                        }
+                    case SelectionsInfo selects:
+                        {
+                            // Plugin.Log("selects");
+                            OptUIElement elmt = selects.IsDropdown
+                                ? parent.AddDropdown(selects.Selections.Select(v => (tr(v.Item1), tr(v.Item2))).ToList(), selects.Current)
+                                : parent.AddLRSelect(selects.Selections.Select(v => (tr(v.Item1), tr(v.Item2))).ToList(), selects.Current);
+                            CheckIdAndStorePreBuild(elmt, selects, parentIsVLayout);
+                            break;
+                        }
+                    case InputInfo input:
+                        {
+                            // Plugin.Log("input");
+                            OptInput elmt = parent.AddInput(input.Value, input.Placeholder, input.Limit, input.Validation);
+                            CheckIdAndStorePreBuild(elmt, input, parentIsVLayout);
+                            break;
+                        }
+                    case SliderInfo slider:
+                        {
+                            // Plugin.Log("slider");
+                            OptSlider elmt = parent.AddSlider(tr(slider.TitleId), slider.Buttons, slider.Min, slider.Max, slider.Value);
+                            CheckIdAndStorePreBuild(elmt, slider, parentIsVLayout);
+                            break;
+                        }
+                    case TextInfo text:
+                        {
+                            // Plugin.Log("text");
+                            OptLabel elmt = parent.AddText(tr(text.ContentId), text.Anchor, text.Size ?? 16, text.Color);
+                            CheckIdAndStorePreBuild(elmt, text, parentIsVLayout);
+                            break;
+                        }
                 }
             }
         }
@@ -329,10 +398,11 @@ namespace EvilMask.Elin.ModOptions.UI
         {
             var (rect, elmt) = CreateElement(parent, "Group");
             rect.gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-            rect.pivot = new Vector2(0.5f, 1);
             var layout = rect.gameObject.AddComponent<VerticalLayoutGroup>();
             layout.padding.top = 10;
             layout.padding.bottom = 10;
+            layout.padding.left = 10;
+            layout.padding.right = 10;
             AddBackground(rect).SetOffsetToAnchored(-8, -8, -8, -8);
             if (title != null) CreateTopic(rect, title);
             if (height != null) elmt.minHeight = height.Value;

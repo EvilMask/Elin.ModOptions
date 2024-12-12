@@ -22,7 +22,6 @@ internal sealed class LayerConfigPatch
                 "没有需要Mod Options管理的模组设定");
             ContentConfigModOptions.Init(__instance.windows[0]);
             m_content = new GameObject("Mod Options").AddComponent<ContentConfigModOptions>();
-            Plugin.Log($"init {m_content} ");
             m_content.gameObject.transform.SetParent(__instance.windows[0].view.transform);
             m_content.BuildUI();
             __instance.windows[0].AddTab(UILang.TabName, m_content, sprite: SpriteSheet.Get("icon_menu_82"));

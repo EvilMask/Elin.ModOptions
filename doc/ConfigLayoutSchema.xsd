@@ -112,12 +112,6 @@
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="ArgType">
-        <xs:attribute name="contentId" type="ContentID" use="optional" />
-        <xs:attribute name="内容ID" type="ContentID" use="optional" />
-        <xs:attribute name="文本ID" type="ContentID" use="optional" />
-    </xs:complexType>
-
     <xs:simpleType name="SelectionType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="dropdown" />
@@ -322,13 +316,17 @@
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="Selections">
-                    <xs:attribute name="min_count" type="xs:nonNegativeInteger" default="1" use="optional" />
-                    <xs:attribute name="選択下限" type="xs:nonNegativeInteger" default="1" use="optional" />
-                    <xs:attribute name="选择下限" type="xs:nonNegativeInteger" default="1" use="optional" />
+                    <xs:attribute name="min_count" type="xs:nonNegativeInteger" default="1"
+                        use="optional" />
+                    <xs:attribute name="選択下限" type="xs:nonNegativeInteger" default="1"
+                        use="optional" />
+                    <xs:attribute name="选择下限" type="xs:nonNegativeInteger" default="1"
+                        use="optional" />
 
-                    <xs:attribute name="max_count" type="xs:nonNegativeInteger" default="1" use="optional" />
-                    <xs:attribute name="選択上限" type="xs:nonNegativeInteger" default="1" use="optional" />
-                    <xs:attribute name="选择上限" type="xs:nonNegativeInteger" default="1" use="optional" />
+                    <xs:attribute name="max_count" type="xs:positiveInteger" default="1"
+                        use="optional" />
+                    <xs:attribute name="選択上限" type="xs:positiveInteger" default="1" use="optional" />
+                    <xs:attribute name="选择上限" type="xs:positiveInteger" default="1" use="optional" />
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

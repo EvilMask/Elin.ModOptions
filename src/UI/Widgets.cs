@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EvilMask.Elin.ModOptions.Ext;
+using NPOI.XWPF.UserModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -193,6 +195,7 @@ public abstract class OptLayout : OptUIElement
             Layout = Builder.Config.CreateHLayout(GetRect(), width),
             Builder = Builder,
         };
+        if (this is OptHLayout) result.Layout.Rect().pivot = new Vector2(0.5f, 1);
         result.Element = result.Layout.GetComponent<LayoutElement>();
         return result;
     }
@@ -204,6 +207,7 @@ public abstract class OptLayout : OptUIElement
             Layout = Builder.Config.CreateVLayout(GetRect(), height),
             Builder = Builder,
         };
+        if (this is OptHLayout) result.Layout.Rect().pivot = new Vector2(0.5f, 1);
         result.Element = result.Layout.GetComponent<LayoutElement>();
         return result;
     }
@@ -215,6 +219,7 @@ public abstract class OptLayout : OptUIElement
             Layout = Builder.Config.CreateGroup(GetRect(), title, height),
             Builder = Builder,
         };
+        if (this is OptHLayout) result.Layout.Rect().pivot = new Vector2(0.5f, 1);
         result.Element = result.Layout.GetComponent<LayoutElement>();
         return result;
     }

@@ -42,7 +42,7 @@ public static class Utils
                         var en = row.GetCell(1);
                         var jp = row.GetCell(2);
                         var cn = row.GetCell(3);
-                        Plugin.Log($"Row {j} - id:{id?.StringCellValue} en:{en?.StringCellValue} jp:{jp?.StringCellValue} cn:{cn?.StringCellValue}");
+                        // Plugin.Log($"Row {j} - id:{id?.StringCellValue} en:{en?.StringCellValue} jp:{jp?.StringCellValue} cn:{cn?.StringCellValue}");
                         controller.SetTranslation(id?.StringCellValue, en?.StringCellValue, jp?.StringCellValue, cn?.StringCellValue);
                     }
                 }

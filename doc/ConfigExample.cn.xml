@@ -67,4 +67,7 @@
     </横排>
     <文字>exampleText</文字>
     <滑动条 id = "slider02" 最小值="0" 最大值="100" 值="30" 按钮="true">MySlider</滑动条>
+    <输入框>
+        <占位符ID>input.placeholder</占位符ID>
+    </输入框>
 </设置>

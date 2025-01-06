@@ -53,24 +53,23 @@ A `<vlayout>` with a border and title can represent a configuration group.
 | `<one_choice>`                  | See [one_choice / 単一選択 / 单选](#one_choice--単一選択--单选).           |
 | `<t_group>`                     | See [t_group / 選択肢グループ / 选项组](#t_group--選択肢グループ--选项组). |
 
-
 ### hlayout / 横組み / 横排
 
 `<hlayout>` represents an `OptHLayout`. Its child elements are arranged horizontally and their width is managed by their parent.
 
 #### Available Children
 
-| Name           | Detail                                                                     |
-| -------------- | -------------------------------------------------------------------------- |
-| `<vlayout>`    | See [vlayout / 縦組み / 竖排](#vlayout--縦組み--竖排).                     |
-| `<hlayout>`    | See [hlayout / 横組み / 横排](#hlayout--横組み--横排).                     |
-| `<text>`       | See [text / 文字 / 文本](#text--文字--文本).                               |
-| `<topic>`      | See [topic / トピック / 主题](#topic--トピック--主题).                     |
-| `<slider>`     | See [slider / スライダー / 滑动条](#slider--スライダー--滑动条).           |
-| `<toggle>`     | See [toggle / スイッチ / 开关](#toggle--スイッチ--开关).                   |
-| `<button>`     | See [button / ボタン / 按钮](#button--ボタン--按钮).                       |
-| `<one_choice>` | See [one_choice / 単一選択 / 单选](#one_choice--単一選択--单选).           |
-| `<t_group>`    | See [t_group / 選択肢グループ / 选项组](#t_group--選択肢グループ--选项组). |
+| Name                                          | Detail                                                                     |
+| --------------------------------------------- | -------------------------------------------------------------------------- |
+| `<vlayout>` / `<縦組み>` / `<竖排>`           | See [vlayout / 縦組み / 竖排](#vlayout--縦組み--竖排).                     |
+| `<hlayout>` / `<横組み>` / `<横排>`           | See [hlayout / 横組み / 横排](#hlayout--横組み--横排).                     |
+| `<text>` / `<文字>` / `<文本>`                | See [text / 文字 / 文本](#text--文字--文本).                               |
+| `<topic>` / `<トピック>` / `<主题>`           | See [topic / トピック / 主题](#topic--トピック--主题).                     |
+| `<slider>` / `<スライダー>` / `<滑动条>`      | See [slider / スライダー / 滑动条](#slider--スライダー--滑动条).           |
+| `<toggle>` / `<スイッチ>` / `<开关>`          | See [toggle / スイッチ / 开关](#toggle--スイッチ--开关).                   |
+| `<button>` / `<ボタン>` / `<按钮>`            | See [button / ボタン / 按钮](#button--ボタン--按钮).                       |
+| `<one_choice>` / `<単一選択>` / `<单选>`      | See [one_choice / 単一選択 / 单选](#one_choice--単一選択--单选).           |
+| `<t_group>` / `<選択肢グループ>` / `<选项组>` | See [t_group / 選択肢グループ / 选项组](#t_group--選択肢グループ--选项组). |
 
 ### text / 文字 / 文本
 
@@ -83,7 +82,6 @@ A `<vlayout>` with a border and title can represent a configuration group.
 | `size` / `サイズ` / `字号` | [14, 16, 18, 20]     | 16                       | Font size.      |
 | `color` / `色` / `颜色`    | #RRGGBB or #RRGGBBAA | null                     | Text color.     |
 | `align` / `整列` / `对齐`  | TextAlignment [^4]   | middle / 中央揃え / 居中 | Text alignment. |
-
 
 ### topic / トピック / 主题
 
@@ -123,10 +121,10 @@ A `<vlayout>` with a border and title can represent a configuration group.
 
 #### Available Children
 
-| Name               | Detail                                            |
-| ------------------ | ------------------------------------------------- |
-| `<contentId>` [^5] | Essential. The translation ID of the text.        |
-| `<tooltip>`        | Optional. The translation ID of the tooltip text. |
+| Name                                          | Detail                                            |
+| --------------------------------------------- | ------------------------------------------------- |
+| `<contentId>` / `<内容ID>` / `<文本ID>`  | Essential. The translation ID [^5] of the text.        |
+| `<tooltip>` / `<ツールチップ>` / `<提示文本>` | Optional. The translation ID [^5] of the tooltip text. |
 
 ### button / ボタン / 按钮
 
@@ -136,10 +134,10 @@ A `<vlayout>` with a border and title can represent a configuration group.
 
 #### Available Children
 
-| Name               | Detail                                            |
-| ------------------ | ------------------------------------------------- |
-| `<contentId>` [^5] | Essential. The translation ID of the text.        |
-| `<tooltip>`        | Optional. The translation ID of the tooltip text. |
+| Name                                          | Detail                                            |
+| --------------------------------------------- | ------------------------------------------------- |
+| `<contentId>` / `<内容ID>` / `<文本ID>`  | Essential. The translation ID [^5] of the text.        |
+| `<tooltip>` / `<ツールチップ>` / `<提示文本>` | Optional. The translation ID [^5] of the tooltip text. |
 
 ### one_choice / 単一選択 / 单选
 
@@ -159,10 +157,10 @@ or an `OptLRSelect`.
 
 #### Available Children
 
-| Name       | Detail                                                                                             |
-| ---------- | -------------------------------------------------------------------------------------------------- |
-| `<title>`  | Optional. The translation ID of the text.                                                          |
-| `<choice>` | Contains at least one. Choices of the widget. See [choice / 選択肢 / 选项](#choice--選択肢--选项). |
+| Name                                | Detail                                                                                             |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `<title>` / `<タイトル>` / `<标题>` | Optional. The translation ID [^5] of the text.                                                          |
+| `<choice>` / `<選択肢>` / `<选项>`  | Contains at least one. Choices of the widget. See [choice / 選択肢 / 选项](#choice--選択肢--选项). |
 
 #### choice / 選択肢 / 选项
 
@@ -170,10 +168,10 @@ or an `OptLRSelect`.
 
 ##### Available Children
 
-| Name               | Detail                                            |
-| ------------------ | ------------------------------------------------- |
-| `<contentId>` [^5] | Essential. The translation ID of the text.        |
-| `<tooltip>`        | Optional. The translation ID of the tooltip text. |
+| Name                                          | Detail                                            |
+| --------------------------------------------- | ------------------------------------------------- |
+| `<contentId>` / `<内容ID>` / `<文本ID>`  | Essential. The translation IDtranslation ID [^5] of the text.        |
+| `<tooltip>` / `<ツールチップ>` / `<提示文本>` | Optional. The translation ID of the tooltip text. |
 
 ### t_group / 選択肢グループ / 选项组
 
@@ -190,10 +188,29 @@ or an `OptLRSelect`.
 
 #### Available Children
 
-| Name       | Detail                                                                                             |
-| ---------- | -------------------------------------------------------------------------------------------------- |
-| `<title>`  | Optional. The translation ID of the text.                                                          |
-| `<choice>` | Contains at least one. Choices of the widget. See [choice / 選択肢 / 选项](#choice--選択肢--选项). |
+| Name                                | Detail                                                                                             |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `<title>` / `<タイトル>` / `<标题>` | Optional. The translation ID [^5] of the text.                                                          |
+| `<choice>` / `<選択肢>` / `<选项>`  | Contains at least one. Choices of the widget. See [choice / 選択肢 / 选项](#choice--選択肢--选项). |
+
+### input / 入力欄 / 输入框
+
+`<input>` represents an `OptInput`.
+
+![Input image](/doc/assets/input.png)
+
+#### Extra Attributes
+
+| Name                                       | Type           | Default | Detail              |
+| ------------------------------------------ | -------------- | ------- | ------------------- |
+| `char_limit` / `最大文字数` / `最大字符数` | Positive `int` | 0       | Maximum characters. |
+
+#### Available Children
+
+| Name                                | Detail                                                                                             |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `<contentId>` / `<内容ID>` / `<文本ID>`  | Essential. The translation ID [^5] of the text.        |
+| `<placeholder>` / `<プレースホルダー>` / `<占位符>`  | The translation ID [^5] for the placeholder of the input. |
 
 # Reflection
 
@@ -254,7 +271,7 @@ Create a toggle for a config entry. Supports `bool`.
 
 | Name        | Type     | Defualt | Detail                             |
 | ----------- | -------- | ------- | ---------------------------------- |
-| `titleId`   | `string` | null    | The translation ID of the text.   |
+| `titleId`   | `string` | null    | The translation ID of the text.    |
 | `tooltipId` | `string` | null    | The translation ID of the tooltip. |
 
 ## ModCfgDropdown
@@ -273,11 +290,12 @@ enum TestEnum
 [ModCfgDropdown]
 ConfigEntry<TestEnum> enum_cfg;
 ```
+
 ### Parameters
 
-| Name        | Type     | Defualt | Detail                             |
-| ----------- | -------- | ------- | ---------------------------------- |
-| `titleId`   | `string` | null    | The translation ID of the label.   |
+| Name      | Type     | Defualt | Detail                           |
+| --------- | -------- | ------- | -------------------------------- |
+| `titleId` | `string` | null    | The translation ID of the label. |
 
 [^1]: Non-empty string. You can get a pre-created widget by this id in the `OnBuildUI` callback.
 [^2]: Integer value represents `preferedWitdth` and float value represents `flexibleWidth` of the `LayoutElement` component. Works only when the parent of the element is an `OptHLayout`.

@@ -150,6 +150,7 @@
                     <xs:element ref="toggle" maxOccurs="1" />
                     <xs:element ref="one_choice" maxOccurs="1" />
                     <xs:element ref="t_group" maxOccurs="1" />
+                    <xs:element ref="input" maxOccurs="1" />
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
@@ -174,6 +175,7 @@
                     <xs:element ref="toggle" maxOccurs="1" />
                     <xs:element ref="one_choice" maxOccurs="1" />
                     <xs:element ref="t_group" maxOccurs="1" />
+                    <xs:element ref="input" maxOccurs="1" />
                 </xs:choice>
                 <xs:attribute name="id" type="NonEmpty" use="optional" />
 
@@ -211,6 +213,10 @@
     <xs:element name="内容ID" substitutionGroup="contentId" />
     <xs:element name="文本ID" substitutionGroup="contentId" />
 
+    <xs:element name="placeholder" type="ContentID" />
+    <xs:element name="プレースホルダー" substitutionGroup="placeholder" />
+    <xs:element name="占位符" substitutionGroup="placeholder" />
+
     <xs:element name="tooltip" type="ContentID" />
     <xs:element name="ツールチップ" substitutionGroup="tooltip" />
     <xs:element name="提示文本" substitutionGroup="tooltip" />
@@ -245,6 +251,25 @@
     </xs:element>
     <xs:element name="文字" substitutionGroup="text" />
     <xs:element name="文本" substitutionGroup="text" />
+
+    <xs:element name="input">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="Element">
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:element ref="contentId" maxOccurs="1" />
+                        <xs:element ref="placeholder" maxOccurs="1" />
+                    </xs:choice>
+                    <!-- Font size of a simple text -->
+                    <xs:attribute name="char_limit" type="xs:positiveInteger" use="optional" />
+                    <xs:attribute name="最大文字数" type="xs:positiveInteger" use="optional" />
+                    <xs:attribute name="最大字符数" type="xs:positiveInteger" use="optional" />
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="入力欄" substitutionGroup="input" />
+    <xs:element name="输入框" substitutionGroup="input" />
 
     <xs:element name="slider">
         <xs:complexType>
@@ -354,6 +379,7 @@
                 <xs:element ref="topic" maxOccurs="1" />
                 <xs:element ref="one_choice" maxOccurs="1" />
                 <xs:element ref="t_group" maxOccurs="1" />
+                <xs:element ref="input" maxOccurs="1" />
             </xs:choice>
         </xs:complexType>
     </xs:element>

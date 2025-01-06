@@ -29,7 +29,7 @@ namespace EvilMask.Elin.ModOptions.UI
 
         public void ShowTooltip(int idx, Transform trans)
         {
-            if (idx <= Tooltips.Count && Tooltips[idx] != null)
+            if (idx < Tooltips.Count && Tooltips[idx] != null)
             {
                 Data.text = Tooltips[idx];
                 TooltipManager.Instance.ShowTooltip(Data, trans);
@@ -49,7 +49,7 @@ namespace EvilMask.Elin.ModOptions.UI
         public override void OnPointerEnter(PointerEventData _)
         {
             var idx = transform.parent.GetComponent<UIButtonLR>().index;
-            if (idx <= Tooltips.Count && Tooltips[idx] != null)
+            if (idx < Tooltips.Count && Tooltips[idx] != null)
             {
                 Data.text = Tooltips[idx];
                 TooltipManager.Instance.ShowTooltip(Data, transform);

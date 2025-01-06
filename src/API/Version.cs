@@ -2,7 +2,7 @@
 
 namespace EvilMask.Elin.ModOptions;
 
-public readonly struct Version(uint major, uint minor, uint patch, uint build = 0)
+public readonly ref struct Version(uint major, uint minor, uint patch, uint build = 0)
 {
     public readonly int Major => (int)(value / 1000000000000UL);
     public readonly int Minor => (int)(value % 1000000000000UL / 100000000UL);

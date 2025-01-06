@@ -95,11 +95,13 @@ public sealed class ModOptionController
     
     private string m_tooltip_id = null;
 
-    private bool TryTr(string contentId, out string result)
+    private bool TryTr(string contentId, out string result) 
+        => TryTr(Lang.langCode, contentId, out result) || TryTr("EN", contentId, out result);
+    private bool TryTr(string langCode, string contentId, out string result)
     {
         result = null;
-        if (!Dict.ContainsKey(Lang.langCode)) return false;
-        var dict = Dict[Lang.langCode];
+        if (!Dict.ContainsKey(langCode)) return false;
+        var dict = Dict[langCode];
         if (!dict.TryGetValue(contentId, out var trans)) return false;
         result = trans;
         return true;
@@ -246,6 +248,12 @@ public sealed class ModOptionController
                 case "滑动条":
                     var slider = ParseSlider(child, parentIsVLayout);
                     if (slider != null) info.Childs.Add(slider);
+                    break;
+                case "input":
+                case "入力欄":
+                case "输入框":
+                    var input = ParseInput(child, parentIsVLayout);
+                    if (input != null) info.Childs.Add(input);
                     break;
                 default:
                     Plugin.Warn($"Unexpected tag <{child.Name}>, ignore ...");
@@ -423,6 +431,26 @@ public sealed class ModOptionController
     {
         TopicInfo info = new() { ContentId = ParseContentId(node) };
         ParseElementContent(node, info, parentIsVLayout);
+        return info;
+    }
+
+    private InputInfo ParseInput(XmlNode node, bool parentIsVLayout)
+    {
+        InputInfo info = new();
+        ParseElementContent(node, info, parentIsVLayout);
+        var limit = node.Attributes.GetNamedItem("char_limit")
+            ?? node.Attributes.GetNamedItem("最大文字数")
+            ?? node.Attributes.GetNamedItem("最大字符数");
+        if (limit != null && int.TryParse(limit.Value, out var v)) info.Limit = Math.Max(v, 0);
+        for (int i = 0; i < node.ChildNodes.Count; i++)
+        {
+            var child = node.ChildNodes[i];
+            var childName = child.Name;
+            if (childName == "placeholder" || childName == "プレースホルダー" || childName == "占位符")
+                info.Placeholder = ParseContentId(child);
+            else if (childName == "contentId" || childName == "内容ID" || childName == "文本ID")
+                info.Value = ParseContentId(child);
+        }
         return info;
     }
 

@@ -485,8 +485,8 @@ namespace EvilMask.Elin.ModOptions.UI
             helper.Tooltips = values.Select(v => v.Item2).ToList();
             var template = d_rect.transform.GetChild(2); // Template
             // The item view order is higher than tooltip by default, so adjust it.
-            template.gameObject.AddComponent<Canvas>().sortingOrder =
-                TooltipManager.Instance.GetComponent<Canvas>().sortingOrder - 1;
+            //template.gameObject.AddComponent<Canvas>().sortingOrder =
+            //    TooltipManager.Instance.GetComponent<Canvas>().sortingOrder - 1;
             template.GetChild(0).GetChild(0).GetChild(0) // Viewport/Content/Item
                 .gameObject.AddComponent<SelectionsItemTooltipHelper>();
             return drop;
@@ -524,6 +524,7 @@ namespace EvilMask.Elin.ModOptions.UI
             i_rect.SetParent(parent);
             var elmt = i_rect.gameObject.AddComponent<LayoutElement>();
             elmt.minWidth = 100;
+            elmt.minHeight = 30;
             DestroyImmediate(i_rect.GetChild(0).gameObject); // Don't need that, the InputField will create one.
             input.characterLimit = lengthLimit;
             input.characterValidation = validation;
